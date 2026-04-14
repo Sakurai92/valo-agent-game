@@ -1,0 +1,336 @@
+/* ===================================================
+   VALORANT エージェント当てゲーム — WordPress プラグイン用 CSS
+   すべてのスタイルは .valo-game-app 内にスコープされています。
+   WordPress テーマの既存スタイルと干渉しません。
+   =================================================== */
+
+/* ---------- CSS 変数（.valo-game-app 内にスコープ） ---------- */
+.valo-game-app {
+    --vg-bg:           #0f1923;
+    --vg-bg-header:    #0d1520;
+    --vg-bg-nav:       #111c27;
+    --vg-bg-card:      #1a2634;
+    --vg-bg-card-hover:#243040;
+    --vg-accent:       #ff4655;
+    --vg-accent-dim:   #c73040;
+    --vg-text:         #ece8e1;
+    --vg-text-muted:   #7a8a99;
+    --vg-border:       #ffffff10;
+    --vg-elim-tint:    rgba(255, 70, 85, 0.18);
+    --vg-radius:       10px;
+    --vg-transition:   0.18s ease;
+
+    background:              var(--vg-bg);
+    color:                   var(--vg-text);
+    font-family:             'Noto Sans JP', sans-serif;
+    -webkit-font-smoothing:  antialiased;
+    box-sizing:              border-box;
+}
+
+.valo-game-app *,
+.valo-game-app *::before,
+.valo-game-app *::after {
+    box-sizing: border-box;
+    margin:     0;
+    padding:    0;
+}
+
+/* ---------- ヘッダー ---------- */
+.valo-game-app .vgame-header {
+    display:         flex;
+    align-items:     center;
+    justify-content: space-between;
+    gap:             12px;
+    padding:         14px 20px;
+    background:      var(--vg-bg-header);
+    border-bottom:   1px solid var(--vg-border);
+}
+
+.valo-game-app .vgame-title {
+    display:        flex;
+    flex-direction: column;
+    line-height:    1.2;
+    margin:         0;
+}
+
+.valo-game-app .vgame-title-valo {
+    display:       block;
+    font-size:     1.1rem;
+    font-weight:   700;
+    color:         var(--vg-accent);
+    letter-spacing:0.1em;
+}
+
+.valo-game-app .vgame-title-sub {
+    display:       block;
+    font-size:     0.75rem;
+    font-weight:   400;
+    color:         var(--vg-text-muted);
+    letter-spacing:0.04em;
+}
+
+.valo-game-app .vgame-header-right {
+    display:     flex;
+    align-items: center;
+    gap:         12px;
+    flex-shrink: 0;
+}
+
+.valo-game-app .vgame-counter {
+    font-size:   0.85rem;
+    color:       var(--vg-text-muted);
+    white-space: nowrap;
+}
+
+.valo-game-app .vgame-counter #count-num {
+    font-size:   1.1rem;
+    font-weight: 700;
+    color:       var(--vg-text);
+}
+
+.valo-game-app .vgame-btn-reset {
+    padding:        7px 16px;
+    background:     transparent;
+    color:          var(--vg-accent);
+    border:         1.5px solid var(--vg-accent);
+    border-radius:  6px;
+    font-size:      0.82rem;
+    font-weight:    600;
+    cursor:         pointer;
+    transition:     background var(--vg-transition), color var(--vg-transition);
+    font-family:    inherit;
+    white-space:    nowrap;
+    line-height:    1.4;
+}
+
+.valo-game-app .vgame-btn-reset:hover {
+    background: var(--vg-accent);
+    color:      #fff;
+}
+
+.valo-game-app .vgame-btn-reset:active {
+    background:   var(--vg-accent-dim);
+    border-color: var(--vg-accent-dim);
+    color:        #fff;
+}
+
+/* ---------- ロールフィルター ---------- */
+.valo-game-app .vgame-role-filter {
+    display:                    flex;
+    gap:                        6px;
+    padding:                    10px 16px;
+    background:                 var(--vg-bg-nav);
+    border-bottom:              1px solid var(--vg-border);
+    overflow-x:                 auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width:            none;
+}
+
+.valo-game-app .vgame-role-filter::-webkit-scrollbar { display: none; }
+
+.valo-game-app .vgame-filter-btn {
+    padding:       6px 14px;
+    background:    transparent;
+    color:         var(--vg-text-muted);
+    border:        1.5px solid #ffffff18;
+    border-radius: 20px;
+    font-size:     0.78rem;
+    font-weight:   600;
+    cursor:        pointer;
+    white-space:   nowrap;
+    transition:    all var(--vg-transition);
+    font-family:   inherit;
+    flex-shrink:   0;
+    line-height:   1.4;
+}
+
+.valo-game-app .vgame-filter-btn:hover {
+    color:        var(--vg-text);
+    border-color: #ffffff40;
+}
+
+.valo-game-app .vgame-filter-btn.active {
+    background:   var(--vg-accent);
+    color:        #fff;
+    border-color: var(--vg-accent);
+}
+
+/* ---------- グリッド ---------- */
+.valo-game-app .vgame-agent-grid {
+    display:               grid;
+    grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+    gap:                   10px;
+    padding:               14px;
+    background:            var(--vg-bg);
+}
+
+/* ---------- エージェントカード ---------- */
+.valo-game-app .agent-card {
+    background:              var(--vg-bg-card);
+    border-radius:           var(--vg-radius);
+    overflow:                hidden;
+    cursor:                  pointer;
+    user-select:             none;
+    -webkit-tap-highlight-color: transparent;
+    transition:              transform var(--vg-transition), opacity var(--vg-transition);
+    border:                  1.5px solid transparent;
+}
+
+.valo-game-app .agent-card:hover {
+    transform:    scale(1.05);
+    background:   var(--vg-bg-card-hover);
+    border-color: #ffffff15;
+}
+
+.valo-game-app .agent-card:active {
+    transform: scale(0.94);
+}
+
+/* 画像ラッパー */
+.valo-game-app .card-img-wrap {
+    position:     relative;
+    width:        100%;
+    aspect-ratio: 1 / 1;
+    background:   #141e29;
+    overflow:     hidden;
+}
+
+.valo-game-app .card-img-wrap img {
+    width:      100%;
+    height:     100%;
+    object-fit: cover;
+    display:    block;
+    transition: filter var(--vg-transition), opacity var(--vg-transition);
+}
+
+/* 消去オーバーレイ */
+.valo-game-app .elim-overlay {
+    position:        absolute;
+    inset:           0;
+    background:      var(--vg-elim-tint);
+    display:         flex;
+    align-items:     center;
+    justify-content: center;
+    opacity:         0;
+    transition:      opacity var(--vg-transition);
+}
+
+.valo-game-app .elim-overlay span {
+    font-size:   2rem;
+    font-weight: 900;
+    color:       var(--vg-accent);
+    text-shadow: 0 0 12px rgba(255, 70, 85, 0.9), 0 0 4px #000;
+    line-height: 1;
+}
+
+/* 消去済みカード */
+.valo-game-app .agent-card.eliminated {
+    opacity:   0.28;
+    transform: none !important;
+}
+
+.valo-game-app .agent-card.eliminated .card-img-wrap img {
+    filter: grayscale(100%);
+}
+
+.valo-game-app .agent-card.eliminated .elim-overlay {
+    opacity: 1;
+}
+
+.valo-game-app .agent-card.eliminated .card-name {
+    color:           var(--vg-text-muted);
+    text-decoration: line-through;
+}
+
+/* エージェント名 */
+.valo-game-app .card-name {
+    padding:     5px 4px 6px;
+    text-align:  center;
+    font-size:   0.68rem;
+    font-weight: 600;
+    color:       var(--vg-text);
+    white-space: nowrap;
+    overflow:    hidden;
+    text-overflow: ellipsis;
+    letter-spacing:0.02em;
+    transition:  color var(--vg-transition);
+}
+
+/* ---------- ローディング ---------- */
+.valo-game-app .vgame-loading {
+    grid-column:     1 / -1;
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    justify-content: center;
+    gap:             16px;
+    padding:         80px 20px;
+    color:           var(--vg-text-muted);
+    font-size:       0.9rem;
+}
+
+.valo-game-app .vgame-spinner {
+    width:        36px;
+    height:       36px;
+    border:       3px solid #ffffff18;
+    border-top-color: var(--vg-accent);
+    border-radius:50%;
+    animation:    vg-spin 0.8s linear infinite;
+}
+
+@keyframes vg-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---------- エラー ---------- */
+.valo-game-app .vgame-error {
+    grid-column:     1 / -1;
+    display:         flex;
+    flex-direction:  column;
+    align-items:     center;
+    gap:             12px;
+    padding:         80px 20px;
+    color:           var(--vg-text-muted);
+    text-align:      center;
+    font-size:       0.9rem;
+}
+
+.valo-game-app .vgame-error button {
+    margin-top:    8px;
+    padding:       8px 24px;
+    background:    var(--vg-accent);
+    color:         #fff;
+    border:        none;
+    border-radius: 6px;
+    font-size:     0.85rem;
+    font-weight:   600;
+    cursor:        pointer;
+    font-family:   inherit;
+}
+
+/* ---------- レスポンシブ ---------- */
+@media (max-width: 480px) {
+    .valo-game-app .vgame-header { padding: 10px 14px; }
+    .valo-game-app .vgame-agent-grid {
+        grid-template-columns: repeat(auto-fill, minmax(76px, 1fr));
+        gap:     8px;
+        padding: 10px;
+    }
+    .valo-game-app .card-name { font-size: 0.62rem; }
+    .valo-game-app .elim-overlay span { font-size: 1.6rem; }
+}
+
+@media (min-width: 768px) {
+    .valo-game-app .vgame-agent-grid {
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap:     12px;
+        padding: 18px;
+    }
+    .valo-game-app .card-name { font-size: 0.72rem; }
+}
+
+@media (min-width: 1200px) {
+    .valo-game-app .vgame-agent-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
+}
