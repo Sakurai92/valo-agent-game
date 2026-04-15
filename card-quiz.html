@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>VALORANT プレイヤーカード当てクイズ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="card-quiz.css">
+</head>
+<body>
+
+  <div id="screen-loading" class="screen active">
+    <div class="spinner"></div>
+    <p>プレイヤーカードデータを読み込み中…</p>
+  </div>
+
+  <div id="screen-start" class="screen">
+    <div class="start-inner">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <p class="label">VALORANT</p>
+      <h1>カード当てクイズ</h1>
+      <p class="desc">プレイヤーカード画像を見て名前を4択で当てよう！<br>全10問</p>
+      <button id="btn-start" class="btn-primary">スタート</button>
+    </div>
+  </div>
+
+  <div id="screen-quiz" class="screen">
+    <header class="quiz-header">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <div class="quiz-meta">
+        <span id="q-progress">1 / 10</span>
+        <span id="q-score">0点</span>
+      </div>
+    </header>
+
+    <div class="quiz-body">
+      <div class="card-image-wrap">
+        <img id="card-image" src="" alt="プレイヤーカード画像">
+      </div>
+
+      <div id="choices" class="choices"></div>
+
+      <div id="feedback" class="feedback"></div>
+
+      <button id="btn-answer" disabled>回答する</button>
+      <button id="btn-next">次の問題 →</button>
+    </div>
+  </div>
+
+  <div id="screen-result" class="screen">
+    <div class="result-inner">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <p class="label">VALORANT</p>
+      <h2>クイズ結果</h2>
+      <div class="result-score">
+        <span id="result-num">0</span>
+        <span class="result-denom"> / 10問正解</span>
+      </div>
+      <p id="result-msg" class="result-msg"></p>
+      <button id="btn-retry" class="btn-primary">もう一度</button>
+    </div>
+  </div>
+
+  <script src="card-quiz.js"></script>
+</body>
+</html>
