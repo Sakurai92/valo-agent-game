@@ -14,9 +14,10 @@ const SKIP_URLS = ['Range', 'HURM', 'Tutorial', 'Poveglia'];
 /** @type {{ name: string, image: string }[]} */
 let allMaps = [];
 
-let questions  = [];
-let currentIdx = 0;
-let score      = 0;
+let questions     = [];
+let currentIdx    = 0;
+let score         = 0;
+let selectedChoice = null;
 
 // ============================================================
 // データ取得
@@ -112,11 +113,27 @@ function showQuestion() {
     const btn = document.createElement('button');
     btn.className = 'choice-btn';
     btn.textContent = map.name;
-    btn.addEventListener('click', () => onAnswer(map.name, q.correct.name));
+    btn.addEventListener('click', () => onSelect(map.name));
     choicesEl.appendChild(btn);
   });
 
+  selectedChoice = null;
+  const btnAnswer = document.getElementById('btn-answer');
+  btnAnswer.disabled = true;
+  btnAnswer.classList.remove('hidden');
   document.getElementById('btn-next').classList.remove('visible');
+}
+
+// ============================================================
+// 選択処理
+// ============================================================
+
+function onSelect(name) {
+  selectedChoice = name;
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.textContent === name);
+  });
+  document.getElementById('btn-answer').disabled = false;
 }
 
 // ============================================================
@@ -134,6 +151,8 @@ function onAnswer(selected, correct) {
   });
 
   if (selected === correct) score++;
+
+  document.getElementById('btn-answer').classList.add('hidden');
 
   const btnNext = document.getElementById('btn-next');
   btnNext.textContent =
@@ -197,6 +216,11 @@ function startGame() {
 document.getElementById('btn-start').addEventListener('click', startGame);
 document.getElementById('btn-retry').addEventListener('click', startGame);
 document.getElementById('btn-next').addEventListener('click', nextQuestion);
+document.getElementById('btn-answer').addEventListener('click', () => {
+  if (selectedChoice !== null) {
+    onAnswer(selectedChoice, questions[currentIdx].correct.name);
+  }
+});
 
 // ============================================================
 // 初期化

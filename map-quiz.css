@@ -251,6 +251,13 @@ h2 {
   transform: scale(0.97);
 }
 
+/* 選択中（回答確定前） */
+.choice-btn.selected {
+  background: rgba(255, 70, 85, 0.12);
+  border-color: var(--accent);
+  color: var(--text);
+}
+
 /* 回答後のフィードバック */
 .choice-btn.correct {
   background: rgba(0, 200, 156, 0.15);
@@ -264,6 +271,31 @@ h2 {
   opacity: 0.6;
 }
 .choice-btn:disabled { cursor: default; }
+
+/* 回答するボタン */
+#btn-answer {
+  width: 100%;
+  max-width: 480px;
+  padding: 14px;
+  background: var(--accent);
+  color: #fff;
+  border: 1.5px solid transparent;
+  border-radius: var(--radius);
+  font-size: 0.95rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background var(--transition), opacity var(--transition);
+  letter-spacing: 0.04em;
+}
+#btn-answer:hover:not(:disabled) { background: var(--accent-dim); }
+#btn-answer:disabled {
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border-color: var(--border);
+  cursor: default;
+}
+#btn-answer.hidden { display: none; }
 
 /* 次へボタン */
 #btn-next {

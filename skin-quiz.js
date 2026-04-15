@@ -16,9 +16,10 @@ const SKIP_KEYWORDS = ['スタンダード', 'Standard', 'デフォルト', 'Def
 let allSkins = [];
 
 // クイズ状態
-let questions   = [];   // 今回のゲームの問題リスト
-let currentIdx  = 0;    // 現在の問題インデックス
-let score       = 0;    // 正解数
+let questions      = [];   // 今回のゲームの問題リスト
+let currentIdx     = 0;    // 現在の問題インデックス
+let score          = 0;    // 正解数
+let selectedChoice = null; // 選択中の選択肢
 
 // ============================================================
 // データ取得
@@ -145,12 +146,28 @@ function showQuestion() {
     const btn = document.createElement('button');
     btn.className = 'choice-btn';
     btn.textContent = skin.name;
-    btn.addEventListener('click', () => onAnswer(skin.name, q.correct.name));
+    btn.addEventListener('click', () => onSelect(skin.name));
     choicesEl.appendChild(btn);
   });
 
+  selectedChoice = null;
+  const btnAnswer = document.getElementById('btn-answer');
+  btnAnswer.disabled = true;
+  btnAnswer.classList.remove('hidden');
   // 「次へ」ボタンを非表示にリセット
   document.getElementById('btn-next').classList.remove('visible');
+}
+
+// ============================================================
+// 選択処理
+// ============================================================
+
+function onSelect(name) {
+  selectedChoice = name;
+  document.querySelectorAll('.choice-btn').forEach(btn => {
+    btn.classList.toggle('selected', btn.textContent === name);
+  });
+  document.getElementById('btn-answer').disabled = false;
 }
 
 // ============================================================
@@ -161,6 +178,7 @@ function onAnswer(selected, correct) {
   // 全ボタンを無効化
   document.querySelectorAll('.choice-btn').forEach(btn => {
     btn.disabled = true;
+    btn.classList.remove('selected');
     if (btn.textContent === correct) {
       btn.classList.add('correct');
     } else if (btn.textContent === selected && selected !== correct) {
@@ -169,6 +187,8 @@ function onAnswer(selected, correct) {
   });
 
   if (selected === correct) score++;
+
+  document.getElementById('btn-answer').classList.add('hidden');
 
   // 最終問題かどうかで「次へ」ボタンのテキストを変える
   const btnNext = document.getElementById('btn-next');
@@ -225,6 +245,11 @@ function startGame() {
 document.getElementById('btn-start').addEventListener('click', startGame);
 document.getElementById('btn-retry').addEventListener('click', startGame);
 document.getElementById('btn-next').addEventListener('click', nextQuestion);
+document.getElementById('btn-answer').addEventListener('click', () => {
+  if (selectedChoice !== null) {
+    onAnswer(selectedChoice, questions[currentIdx].correct.name);
+  }
+});
 
 // ============================================================
 // 初期化
