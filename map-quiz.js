@@ -99,17 +99,80 @@ function showScreen(id) {
 
 const CROP_SCALE = 5;
 
-// 中央寄りの正規分布でランダム値を生成（25〜75%の範囲、std=15）
-function randCropPos() {
-  const u = 1 - Math.random();
-  const v = Math.random();
+// 全域ランダム
+function randCropWide() { return Math.random() * 100; }
+
+// 中央寄り（CORSが使えない場合のフォールバック）
+function randCropTight() {
+  const u = 1 - Math.random(), v = Math.random();
   const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-  return Math.max(25, Math.min(75, 50 + z * 15));
+  return Math.max(30, Math.min(70, 50 + z * 12));
+}
+
+// 指定位置のクロップエリアの平均輝度を取得（CORSエラー時は -1 を返す）
+function getSampleBrightness(imgEl, ox, oy) {
+  const W = imgEl.offsetWidth || 480;
+  const H = imgEl.offsetHeight || 260;
+  const visLeft = ox / 100 * W * (CROP_SCALE - 1) / CROP_SCALE;
+  const visTop  = oy / 100 * H * (CROP_SCALE - 1) / CROP_SCALE;
+  const visW = W / CROP_SCALE;
+  const visH = H / CROP_SCALE;
+
+  const nw = imgEl.naturalWidth;
+  const nh = imgEl.naturalHeight;
+  if (!nw || !nh) return -1;
+
+  const dispScale = Math.max(W / nw, H / nh);
+  const srcX = (visLeft + (nw * dispScale - W) / 2) / dispScale;
+  const srcY = (visTop  + (nh * dispScale - H) / 2) / dispScale;
+  const srcW = visW / dispScale;
+  const srcH = visH / dispScale;
+
+  try {
+    const S = 12;
+    const c = document.createElement('canvas');
+    c.width = S; c.height = S;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(imgEl, srcX, srcY, srcW, srcH, 0, 0, S, S);
+    const data = ctx.getImageData(0, 0, S, S).data;
+    let sum = 0, cnt = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i + 3] < 10) continue; // 透明ピクセルはスキップ
+      sum += (data[i] + data[i + 1] + data[i + 2]) / 3;
+      cnt++;
+    }
+    return cnt > 0 ? sum / cnt : 0;
+  } catch (e) {
+    return -1; // CORS制限
+  }
 }
 
 function applyRandomCrop(imgEl) {
-  cropOx = randCropPos();
-  cropOy = randCropPos();
+  const TRIES   = 8;
+  const BRIGHT_OK = 30; // この輝度以上なら採用
+
+  let bestOx = randCropWide();
+  let bestOy = randCropWide();
+  let bestBright = -Infinity;
+
+  for (let i = 0; i < TRIES; i++) {
+    const ox = (i === 0) ? bestOx : randCropWide();
+    const oy = (i === 0) ? bestOy : randCropWide();
+    const b  = getSampleBrightness(imgEl, ox, oy);
+
+    if (b < 0) {
+      // CORSが使えない → 中央寄りにフォールバック
+      bestOx = randCropTight();
+      bestOy = randCropTight();
+      break;
+    }
+
+    if (b > bestBright) { bestBright = b; bestOx = ox; bestOy = oy; }
+    if (bestBright >= BRIGHT_OK) break; // 十分明るい場所が見つかった
+  }
+
+  cropOx = bestOx;
+  cropOy = bestOy;
   imgEl.style.transition = '';
   imgEl.style.transformOrigin = `${cropOx}% ${cropOy}%`;
   imgEl.style.transform = `scale(${CROP_SCALE})`;
