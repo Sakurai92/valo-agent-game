@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>VALORANT タイムアタック</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="time-attack.css">
+</head>
+<body>
+
+  <div id="screen-loading" class="screen active">
+    <div class="spinner"></div>
+    <p>データを読み込み中…</p>
+  </div>
+
+  <div id="screen-start" class="screen">
+    <div class="start-inner">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <p class="label">VALORANT</p>
+      <h1>タイムアタック</h1>
+      <p class="desc">60秒間でできるだけ多くの問題に正解しよう！<br>スキル・スプレー・ガンバディ・スキン・カードをランダム出題</p>
+      <button id="btn-start" class="btn-primary">スタート</button>
+    </div>
+  </div>
+
+  <div id="screen-quiz" class="screen">
+    <header class="quiz-header">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <div class="timer-num-wrap">
+        <span id="timer-num">60</span>
+        <span class="timer-unit">秒</span>
+      </div>
+      <div class="score-wrap">
+        正解 <span id="score">0</span>
+      </div>
+    </header>
+
+    <div class="timer-bar-wrap">
+      <div id="timer-bar" class="timer-bar"></div>
+    </div>
+
+    <div class="quiz-body">
+      <p id="q-label" class="q-label"></p>
+      <div class="image-wrap">
+        <img id="q-image" src="" alt="">
+      </div>
+      <div id="choices" class="choices"></div>
+    </div>
+  </div>
+
+  <div id="screen-result" class="screen">
+    <div class="result-inner">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <p class="label">VALORANT</p>
+      <h2>タイムアップ！</h2>
+      <div class="result-score">
+        <span id="result-score">0</span>
+        <span class="result-denom"> / <span id="result-attempted">0</span>問正解</span>
+      </div>
+      <p class="result-pct-text">正解率 <span id="result-pct">0</span>%</p>
+      <p id="result-msg" class="result-msg"></p>
+      <button id="btn-retry" class="btn-primary">もう一度</button>
+    </div>
+  </div>
+
+  <script src="time-attack.js"></script>
+</body>
+</html>
