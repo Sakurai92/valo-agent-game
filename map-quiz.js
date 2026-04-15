@@ -119,9 +119,10 @@ function showQuestion() {
   const img = document.getElementById('map-image');
   img.style.transform = '';
   img.style.transformOrigin = '';
+  img.onload = () => applyRandomCrop(img);
   img.src = q.correct.image;
   img.alt = q.correct.name;
-  img.onload = () => applyRandomCrop(img);
+  if (img.complete) applyRandomCrop(img);
 
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
