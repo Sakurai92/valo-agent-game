@@ -76,13 +76,7 @@ const CROP_SCALE = 5;
 
 function randCropWide() { return Math.random() * 100; }
 
-function randCropTight() {
-  const u = 1 - Math.random(), v = Math.random();
-  const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-  return Math.max(30, Math.min(70, 50 + z * 12));
-}
-
-function getSampleBrightness(imgEl, ox, oy) {
+function getDarkRatio(imgEl, ox, oy) {
   const W = imgEl.offsetWidth || 480;
   const H = imgEl.offsetHeight || 260;
   const visLeft = ox / 100 * W * (CROP_SCALE - 1) / CROP_SCALE;
@@ -107,39 +101,44 @@ function getSampleBrightness(imgEl, ox, oy) {
     const ctx = c.getContext('2d');
     ctx.drawImage(imgEl, srcX, srcY, srcW, srcH, 0, 0, S, S);
     const data = ctx.getImageData(0, 0, S, S).data;
-    let sum = 0, cnt = 0;
+    let dark = 0, total = 0;
     for (let i = 0; i < data.length; i += 4) {
       if (data[i + 3] < 10) continue;
-      sum += (data[i] + data[i + 1] + data[i + 2]) / 3;
-      cnt++;
+      total++;
+      if ((data[i] + data[i + 1] + data[i + 2]) / 3 < 30) dark++;
     }
-    return cnt > 0 ? sum / cnt : 0;
+    return total > 0 ? dark / total : 1;
   } catch (e) {
     return -1;
   }
 }
 
 function applyRandomCrop(imgEl) {
-  const TRIES    = 8;
-  const BRIGHT_OK = 30;
+  const TRIES    = 20;
+  const MAX_DARK = 0.7;
 
-  let bestOx = randCropWide();
-  let bestOy = randCropWide();
-  let bestBright = -Infinity;
+  let bestOx   = randCropWide();
+  let bestOy   = randCropWide();
+  let bestDark = Infinity;
 
   for (let i = 0; i < TRIES; i++) {
-    const ox = (i === 0) ? bestOx : randCropWide();
-    const oy = (i === 0) ? bestOy : randCropWide();
-    const b  = getSampleBrightness(imgEl, ox, oy);
+    const ox   = randCropWide();
+    const oy   = randCropWide();
+    const dark = getDarkRatio(imgEl, ox, oy);
 
-    if (b < 0) {
-      bestOx = randCropWide();
-      bestOy = randCropWide();
+    if (dark < 0) {
+      bestOx = ox;
+      bestOy = oy;
       break;
     }
 
-    if (b > bestBright) { bestBright = b; bestOx = ox; bestOy = oy; }
-    if (bestBright >= BRIGHT_OK) break;
+    if (dark < bestDark) {
+      bestDark = dark;
+      bestOx = ox;
+      bestOy = oy;
+    }
+
+    if (bestDark <= MAX_DARK) break;
   }
 
   cropOx = bestOx;
@@ -187,6 +186,7 @@ function showQuestion() {
   img.style.transform = '';
   img.style.transformOrigin = '';
   img.onload = () => applyRandomCrop(img);
+  img.crossOrigin = 'anonymous';
   img.src = q.correct.image;
   img.alt = q.correct.name;
   if (img.complete) applyRandomCrop(img);
