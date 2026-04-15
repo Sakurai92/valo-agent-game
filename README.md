@@ -1,1 +1,1 @@
-https://sakurai92.github.io/valo-agent-game/
+https://sakurai92.github.io/valo/
