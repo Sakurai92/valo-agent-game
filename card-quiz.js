@@ -25,10 +25,10 @@ async function loadCards() {
   const json = await res.json();
 
   return json.data
-    .filter(c => c.largeArt || c.wideArt)
+    .filter(c => c.animationGif || c.largeArt || c.wideArt)
     .map(c => ({
       name:  c.displayName,
-      image: c.largeArt ?? c.wideArt,
+      image: c.animationGif ?? c.largeArt ?? c.wideArt,
     }));
 }
 
