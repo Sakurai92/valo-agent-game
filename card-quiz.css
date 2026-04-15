@@ -189,7 +189,7 @@ h2 {
 
 .card-image-wrap {
   width: 100%;
-  max-width: 100px;
+  max-width: 80px;
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
