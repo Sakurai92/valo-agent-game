@@ -311,6 +311,7 @@ h2 {
 #btn-next {
   width: 100%;
   max-width: 480px;
+  margin-top: auto;
   padding: 14px;
   background: var(--accent);
   color: #fff;
