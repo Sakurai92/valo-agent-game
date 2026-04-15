@@ -97,7 +97,7 @@ function showScreen(id) {
 // ============================================================
 
 function applyRandomCrop(imgEl) {
-  const scale = 4;
+  const scale = 5;
   const ox = Math.random() * 100;
   const oy = Math.random() * 100;
   imgEl.style.transformOrigin = `${ox}% ${oy}%`;
