@@ -60,8 +60,18 @@ function pickRandom(arr, n) {
 }
 
 function createQuestion(ability) {
-  const others = allAbilities.filter(a => a.abilityName !== ability.abilityName);
-  const wrongs = pickRandom(others, 3).map(a => a.abilityName);
+  const sameAgent = allAbilities.filter(
+    a => a.agentName === ability.agentName && a.abilityName !== ability.abilityName
+  );
+  let wrongs = pickRandom(sameAgent, 3).map(a => a.abilityName);
+
+  if (wrongs.length < 3) {
+    const others = allAbilities.filter(
+      a => a.agentName !== ability.agentName && !wrongs.includes(a.abilityName)
+    );
+    wrongs = [...wrongs, ...pickRandom(others, 3 - wrongs.length).map(a => a.abilityName)];
+  }
+
   return {
     correct: ability,
     choices: shuffle([ability.abilityName, ...wrongs]),
