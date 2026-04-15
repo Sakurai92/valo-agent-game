@@ -99,12 +99,12 @@ function showScreen(id) {
 
 const CROP_SCALE = 5;
 
-// 中央寄りの正規分布でランダム値を生成（0〜100%、std=22で95%が6〜94%に収まる）
+// 中央寄りの正規分布でランダム値を生成（25〜75%の範囲、std=15）
 function randCropPos() {
   const u = 1 - Math.random();
   const v = Math.random();
   const z = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-  return Math.max(0, Math.min(100, 50 + z * 22));
+  return Math.max(25, Math.min(75, 50 + z * 15));
 }
 
 function applyRandomCrop(imgEl) {
