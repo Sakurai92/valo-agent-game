@@ -102,6 +102,7 @@ function applyRandomCrop(imgEl) {
   const oy = Math.random() * 100;
   imgEl.style.transformOrigin = `${ox}% ${oy}%`;
   imgEl.style.transform = `scale(${scale})`;
+  imgEl.style.opacity = '1';
 }
 
 // ============================================================
@@ -116,6 +117,7 @@ function showQuestion() {
   document.getElementById('q-score').textContent = `${score}点`;
 
   const img = document.getElementById('map-image');
+  img.style.opacity = '0';
   img.style.transform = '';
   img.style.transformOrigin = '';
   img.onload = () => applyRandomCrop(img);
