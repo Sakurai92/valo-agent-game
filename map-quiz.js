@@ -93,6 +93,19 @@ function showScreen(id) {
 }
 
 // ============================================================
+// ランダムクロップ
+// ============================================================
+
+function applyRandomCrop(imgEl) {
+  const scale = 2.5 + Math.random() * 0.5; // 2.5〜3倍ズーム
+  const margin = 50 / scale;               // 端が切れないための余白
+  const ox = margin + Math.random() * (100 - 2 * margin);
+  const oy = margin + Math.random() * (100 - 2 * margin);
+  imgEl.style.transformOrigin = `${ox}% ${oy}%`;
+  imgEl.style.transform = `scale(${scale})`;
+}
+
+// ============================================================
 // クイズ表示
 // ============================================================
 
@@ -104,8 +117,11 @@ function showQuestion() {
   document.getElementById('q-score').textContent = `${score}点`;
 
   const img = document.getElementById('map-image');
+  img.style.transform = '';
+  img.style.transformOrigin = '';
   img.src = q.correct.image;
   img.alt = q.correct.name;
+  img.onload = () => applyRandomCrop(img);
 
   const choicesEl = document.getElementById('choices');
   choicesEl.innerHTML = '';
