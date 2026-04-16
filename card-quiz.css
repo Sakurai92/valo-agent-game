@@ -129,6 +129,7 @@ h2 {
   min-height: 1.5em;
 }
 
+/* ── Quiz screen ── */
 #screen-quiz {
   display: none;
   flex-direction: column;
@@ -175,24 +176,21 @@ h2 {
   border-color: #ffffff50;
 }
 
-.quiz-body {
+/* 上半分: スクロール可能な画像エリア */
+.quiz-image-area {
   flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 12px 16px 140px;
-  gap: 12px;
-  max-width: 600px;
-  width: 100%;
-  margin: 0 auto;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 12px 16px;
 }
 
 .card-image-wrap {
-  flex: 1;
   width: 100%;
   max-width: 480px;
-  min-height: 0;
-  max-height: 60dvh;
   background: var(--bg-card);
   border-radius: var(--radius);
   border: 1px solid var(--border);
@@ -201,13 +199,26 @@ h2 {
   align-items: center;
   justify-content: center;
 }
+
 #card-image {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+  width: 100%;
+  height: auto;
   display: block;
   user-select: none;
   -webkit-user-drag: none;
+}
+
+/* 下半分: 固定のコントロールエリア */
+.quiz-controls {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--bg);
+  width: 100%;
 }
 
 .choices {
@@ -237,18 +248,16 @@ h2 {
   background: var(--bg-hover);
   border-color: #ffffff30;
 }
-.choice-btn:active:not(:disabled) {
-  transform: scale(0.97);
-}
+.choice-btn:active:not(:disabled) { transform: scale(0.97); }
 
 .feedback {
   display: none;
   width: 100%;
   max-width: 480px;
-  padding: 14px 16px;
+  padding: 12px 16px;
   border-radius: var(--radius);
   text-align: center;
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 700;
   line-height: 1.5;
 }
@@ -270,7 +279,6 @@ h2 {
   border-color: var(--accent);
   color: var(--text);
 }
-
 .choice-btn.correct {
   background: rgba(0, 200, 156, 0.15);
   border-color: var(--correct);
@@ -309,12 +317,7 @@ h2 {
 #btn-answer.hidden { display: none; }
 
 #btn-next {
-  position: fixed;
-  bottom: 70px;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
-  width: calc(100% - 32px);
+  width: 100%;
   max-width: 480px;
   padding: 14px;
   background: var(--accent);
@@ -328,7 +331,6 @@ h2 {
   display: none;
   transition: background var(--transition);
   letter-spacing: 0.04em;
-  z-index: 10;
 }
 #btn-next:hover   { background: var(--accent-dim); }
 #btn-next.visible { display: block; }
