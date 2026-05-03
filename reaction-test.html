@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>反応速度テスト</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="reaction-test.css">
+</head>
+<body>
+
+  <div id="screen-start" class="screen active">
+    <div class="inner">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <p class="label">REACTION</p>
+      <h1>反応速度テスト</h1>
+      <p class="desc">赤から緑に変わったらすぐタップ<br>全5回の平均タイムを測定</p>
+      <button id="btn-start" class="btn-primary">スタート</button>
+    </div>
+  </div>
+
+  <div id="screen-game" class="screen">
+    <div class="game-round" id="game-round"></div>
+    <div class="game-center">
+      <p class="game-main-text" id="game-main-text"></p>
+      <p class="game-sub-text" id="game-sub-text"></p>
+    </div>
+  </div>
+
+  <div id="screen-result" class="screen">
+    <div class="inner">
+      <a href="index.html" class="btn-home">← ホーム</a>
+      <p class="label">RESULT</p>
+      <h2>平均タイム</h2>
+      <div class="avg-wrap">
+        <span id="result-avg">---</span>
+        <span class="avg-unit">ms</span>
+      </div>
+      <div id="result-list" class="result-list"></div>
+      <p id="result-msg" class="result-msg"></p>
+      <button id="btn-retry" class="btn-primary">もう一度</button>
+    </div>
+  </div>
+
+  <script src="reaction-test.js"></script>
+</body>
+</html>
