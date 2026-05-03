@@ -35,8 +35,11 @@ function setGameState(s) {
     subTextEl.textContent  = '';
     const delay = MIN_DELAY + Math.random() * (MAX_DELAY - MIN_DELAY);
     waitTimer = setTimeout(() => {
-      reactStart = performance.now();
       setGameState('react');
+      // 緑が実際に描画されたフレームの直後にタイマーをセット
+      requestAnimationFrame(() => {
+        reactStart = performance.now();
+      });
     }, delay);
 
   } else if (s === 'react') {
